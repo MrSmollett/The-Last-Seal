@@ -1,0 +1,10 @@
+{
+    "Lua.diagnostics.disable": [
+        "unused-function",
+        "undefined-global",
+        "lowercase-global"
+    ],
+    "Lua.diagnostics.globals": [
+        "network"
+    ]
+}

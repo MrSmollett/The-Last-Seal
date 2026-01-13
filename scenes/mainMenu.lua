@@ -1,5 +1,8 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
+local json = require("json")
+--local fairbase = require("libs.fairbase")
+
 
 local scene = composer.newScene()
 
@@ -12,6 +15,8 @@ _CY = display.contentCenterY
 function scene:create( event )
 
 	local sceneGroup = self.view
+        
+    local backgroundIMG = display.newImageRect( sceneGroup, "assets/mainMenu/background.png", _W, _H )
 
 
 end
@@ -27,25 +32,27 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		
-        local backgroundIMG = display.newImageRect( sceneGroup, "assets/errorLoad.png", _W, _H )
-
 	elseif ( phase == "did" ) then
 
         local function mainMenuBtnPressed( event ) 
             if ( "ended" == event.phase ) then
                 print( event.target.id )
+                if event.target.id == "quitBtn" then
+                    native.requestExit()
+                end
             end
         end
         
         local playBtn = widget.newButton(
             {
                 id = "playBtn",
-                x = 0 - _W/4,
+                x = 0,
                 y = 0,
-                width = _W/4,
-                height = _H/5,
+                width = _W/5,
+                height = _H/6,
                 defaultFile = "assets/mainMenu/playBtn.png",
                 overFile = "assets/mainMenu/playBtn_pressed.png",
+                alpha = 0.5,
                 onEvent = mainMenuBtnPressed
             }
         )
@@ -53,10 +60,10 @@ function scene:show( event )
         local optionsBtn = widget.newButton(
             {
                 id = "optionsBtn",
-                x = 0 - _W/4,
-                y = playBtn.y + _H/6,
-                width = _W/4,
-                height = _H/5,
+                x = 0,
+                y = playBtn.y + _H/7,
+                width = _W/5,
+                height = _H/6,
                 defaultFile = "assets/mainMenu/optionsBtn.png",
                 overFile = "assets/mainMenu/optionsBtn_pressed.png",
                 onEvent = mainMenuBtnPressed
@@ -66,10 +73,10 @@ function scene:show( event )
         local quitBtn = widget.newButton(
             {
                 id = "quitBtn",
-                x = 0 - _W/4,
-                y = optionsBtn.y + _H/6,
-                width = _W/4,
-                height = _H/5,
+                x = 0,
+                y = optionsBtn.y + _H/7,
+                width = _W/5,
+                height = _H/6,
                 defaultFile = "assets/mainMenu/quitBtn.png",
                 overFile = "assets/mainMenu/quitBtn_pressed.png",
                 onEvent = mainMenuBtnPressed
