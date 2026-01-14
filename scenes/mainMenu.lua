@@ -18,9 +18,11 @@ function scene:create( event )
 	local sceneGroup = self.view
 
     print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
-        
+
     local backgroundIMG = display.newImageRect( sceneGroup, "assets/mainMenu/background.png", _W, _H )
-    
+    local appName = display.newImageRect( sceneGroup, "assets/mainMenu/appName.png", _W/3, _H/6 )
+        appName.x, appName.y = 0, -_H/5
+
 end
 
 
@@ -33,7 +35,7 @@ function scene:show( event )
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		
+
 	elseif ( phase == "did" ) then
 
         local function mainMenuBtnPressed( event ) 
@@ -48,11 +50,13 @@ function scene:show( event )
                 elseif event.target.id == "quitBtn" then
                     print( event.target.id )
                     native.requestExit()
-                    
-                end 
+
+                end
             end
         end
-        
+
+
+
         local playBtn = widget.newButton(
             {
                 id = "playBtn",
@@ -66,7 +70,7 @@ function scene:show( event )
                 onEvent = mainMenuBtnPressed
             }
         )
-                
+
         local optionsBtn = widget.newButton(
             {
                 id = "optionsBtn",
