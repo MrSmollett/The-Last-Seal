@@ -24,7 +24,7 @@ M.updateData = function( url, name )
             }
         }
 
-    network.request(url, "PUT", networkListener, params)
+    network.request(url..".json", "PUT", networkListener, params)
 end
 
 M.createKey = function( url, name )
@@ -37,16 +37,16 @@ M.createKey = function( url, name )
         }
     }
 
-    network.request(url, "POST", networkListener, params)
+    network.request(url..".json", "POST", networkListener, params)
 end
 
 M.deleteKey = function( url )
 
-    network.request(url, "DELETE", networkListener)
+    network.request(url..".json", "DELETE", networkListener)
 
 end
 
-M.getData = function(url)
+M.getData = function(url, FirebaseGet)
     local dataGet = nil
 
     local networkGetListener = function(event)
@@ -68,7 +68,7 @@ M.getData = function(url)
         progress = "download",
         }
     
-    network.request(url, "GET", networkGetListener, params)
+    network.request(url..".json", "GET", networkGetListener, params)
 end
 
 return M

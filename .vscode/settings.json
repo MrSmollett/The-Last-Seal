@@ -2,7 +2,8 @@
     "Lua.diagnostics.disable": [
         "unused-function",
         "undefined-global",
-        "lowercase-global"
+        "lowercase-global",
+        "undefined-field"
     ],
     "Lua.diagnostics.globals": [
         "network"

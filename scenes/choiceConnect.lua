@@ -18,10 +18,12 @@ function scene:create( event )
 	local sceneGroup = self.view
 
     print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
-        
-    local backgroundIMG = display.newImageRect( sceneGroup, "assets/mainMenu/background.png", _W, _H )
-    
+
+    local backgroundIMG = display.newImageRect( sceneGroup, "assets/choiceConnect/background.png", _W, _H )
+
+
 end
+
 
 
 
@@ -29,74 +31,52 @@ function scene:show( event )
 
 	local sceneGroup = self.view
         sceneGroup.x, sceneGroup.y = _CX, _CY
-
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		
+
 	elseif ( phase == "did" ) then
 
         local function mainMenuBtnPressed( event ) 
             if ( "ended" == event.phase ) then
-                if event.target.id == "playBtn" then
-                    print( event.target.id )
-                    composer.gotoScene( "scenes.login" )
-
-                elseif event.target.id == "optionsBtn" then
+                if event.target.id == "lobbyBtn" then
                     print( event.target.id )
 
-                elseif event.target.id == "quitBtn" then
+                elseif event.target.id == "randomConnectBtn" then
                     print( event.target.id )
-                    native.requestExit()
-                    
-                end 
+
+                end
             end
         end
-        
-        local playBtn = widget.newButton(
+
+        local lobbyBtn = widget.newButton(
             {
-                id = "playBtn",
+                id = "lobbyBtn",
                 x = 0,
                 y = 0,
                 width = _W/5,
                 height = _H/6,
-                defaultFile = "assets/mainMenu/playBtn.png",
-                overFile = "assets/mainMenu/playBtn_pressed.png",
-                alpha = 0.5,
+                defaultFile = "assets/choiceConnect/lobbyBtn.png",
+                overFile = "assets/choiceConnect/lobbyBtn_pressed.png",
                 onEvent = mainMenuBtnPressed
             }
         )
-                
-        local optionsBtn = widget.newButton(
+
+        local randomConnectBtn = widget.newButton(
             {
-                id = "optionsBtn",
+                id = "randomConnectBtn",
                 x = 0,
-                y = playBtn.y + _H/7,
+                y = lobbyBtn.y + _H/7,
                 width = _W/5,
                 height = _H/6,
-                defaultFile = "assets/mainMenu/optionsBtn.png",
-                overFile = "assets/mainMenu/optionsBtn_pressed.png",
+                defaultFile = "assets/choiceConnect/randomConnectBtn.png",
+                overFile = "assets/choiceConnect/randomConnectBtn_pressed.png",
                 onEvent = mainMenuBtnPressed
             }
         )
 
-        local quitBtn = widget.newButton(
-            {
-                id = "quitBtn",
-                x = 0,
-                y = optionsBtn.y + _H/7,
-                width = _W/5,
-                height = _H/6,
-                defaultFile = "assets/mainMenu/quitBtn.png",
-                overFile = "assets/mainMenu/quitBtn_pressed.png",
-                onEvent = mainMenuBtnPressed
-            }
-        )
-
-
-        sceneGroup:insert(playBtn)
-        sceneGroup:insert(optionsBtn)
-        sceneGroup:insert(quitBtn)
+        sceneGroup:insert(lobbyBtn)
+        sceneGroup:insert(randomConnectBtn)
 
 	end
 end
