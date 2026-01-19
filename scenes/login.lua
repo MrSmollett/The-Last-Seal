@@ -2,6 +2,8 @@ local composer = require( "composer" )
 local widget = require( "widget" )
 local json = require("json")
 local fairbase = require("libs.fairbase")
+local checkDataSc = require("scripts.checkData")
+local LFW = require("libs.libFileWork")
 
 url = "https://thelastseal-1488-default-rtdb.firebaseio.com/"
 
@@ -19,6 +21,18 @@ nickname = nil
 nicknameChecks = false
 passwordChecks = false
 
+blur = display.newImageRect("assets/login/loadData.png", _W, _H)
+    blur.x, blur.y = _CX, _CY
+blur.isVisible = false
+
+userDa = LFW.Read("userData.tls")
+
+if userDa ~= false then
+    userDa = json.decode(LFW.Read("userData.tls"))
+    checkDataSc.checkLoad(userDa.nickname, userDa.password)
+    composer.gotoScene( "scenes.changePers" )
+end
+
 
 function saveData(id, text)
     if id == "NickField" then
@@ -32,37 +46,64 @@ end
 
 function checkData()
 
-    local function onEnterFrame(event)
-        print( nicknameChecks, passwordChecks )
-        if nicknameChecks == passwordChecks then
-            Runtime:removeEventListener("enterFrame", onEnterFrame)
-            composer.gotoScene( "scenes.choiceConnect" )
+
+    local count = 1
+
+    local function loginTmL(event)
+        --print( nicknameChecks, passwordChecks )
+        --print( password, nickname )
+        if nicknameChecks == true and passwordChecks == true then
+            blur.isVisible = false
+            logBtn.isVisible = false
+            regBtn.isVisible = false
+            timer.cancel( loginTm )
+            checkDataSc.checkLoad(nickname, password)
+        elseif nickname ~= nil or password ~= nil and nicknameChecks == false and passwordChecks == false then
+            timer.cancel( loginTm )
+            errorAuth()
         end
     end
 
-    Runtime:addEventListener("enterFrame", onEnterFrame)
+    loginTm = timer.performWithDelay( 2000, loginTmL )
+
+    function errorAuth()
+        native.showAlert( "Вход", "Пользователь не найден!", { "OK" } )
+            blur.isVisible = false
+            NickField.isVisible = true
+            PasswordField.isVisible = true
+            logBtn.isVisible = true
+            regBtn.isVisible = true
+    end
 
     function nicknameCheck(NC)
         if nickname == NC then
             nicknameChecks = true
         else
-            print(nickname, NC)
+            print(nicknameChecks, nickname, NC)
         end
     end
     function passwordCheck(PC)
         if password == PC then
             passwordChecks = true
         else
-            print(password, PC)
+            print(passwordChecks, password, PC)
         end
     end
 
     if nickname == nil or password == nil then
         print("Проверьте заполненность полей!")
         native.showAlert( "Вход", "Проверьте заполненность полей!", { "OK" } )
+
+
     else
         fairbase.getData(url.."usersDate/"..nickname.."/nickname/value/", function(dat) nicknameCheck(string.gsub(dat, '[\\"]', "" )) end)
         fairbase.getData(url.."usersDate/"..nickname.."/password/value/", function(dat) passwordCheck(string.gsub(dat, '[\\"]', "" )) end)
+        blur.isVisible = true
+
+        logBtn.isVisible = false
+        regBtn.isVisible = false
+        PasswordField.isVisible = false
+        NickField.isVisible = false
     end
 end
 
@@ -74,6 +115,22 @@ function regUser()
     else
         fairbase.updateData(url.."usersDate/"..nickname.."/nickname/", nickname)
         fairbase.updateData(url.."usersDate/"..nickname.."/password/", password)
+        blur.isVisible = true
+        logBtn.isVisible = false
+        regBtn.isVisible = false
+        PasswordField.isVisible = false
+        NickField.isVisible = false
+
+        local function regTmL(event)
+            blur.isVisible = false
+            NickField.isVisible = true
+            PasswordField.isVisible = true
+            logBtn.isVisible = true
+            regBtn.isVisible = true
+            timer.cancel( regTm )
+        end
+
+        regTm = timer.performWithDelay( 2000, regTmL )
     end
 
 end
@@ -106,8 +163,12 @@ function scene:show( event )
 
         
         local function textListener( event )
-            if ( event.phase == "ended" or event.phase == "submitted" ) then
+            if (event.phase == "editing") then
                 saveData(event.target.id, event.target.text)
+
+            elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+                saveData(event.target.id, event.target.text)
+                native.setKeyboardFocus( nil )
             end
         end
         
@@ -137,7 +198,7 @@ function scene:show( event )
             end
         end
         
-        local logBtn = widget.newButton(
+        logBtn = widget.newButton(
             {
                 id = "logBtn",
                 x = -(PasswordField.width/4),
@@ -149,7 +210,7 @@ function scene:show( event )
                 onEvent = mainMenuBtnPressed
             }
         )
-        local regBtn = widget.newButton(
+        regBtn = widget.newButton(
             {
                 id = "regBtn",
                 x = PasswordField.width/4,
@@ -177,9 +238,12 @@ function scene:hide( event )
 	if ( phase == "will" ) then
 
 	elseif ( phase == "did" ) then
-        NickField:removeSelf()
-        PasswordField:removeSelf()
-
+        if NickField ~= nil and PasswordField ~= nil then
+            NickField:removeSelf()
+            PasswordField:removeSelf()
+        end
+        display.remove( sceneGroup )
+        sceneGroup = nil
 	end
 end
 
