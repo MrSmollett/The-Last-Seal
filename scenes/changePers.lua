@@ -55,22 +55,45 @@ function scene:create( event )
 			sceneGroup:insert(pers_text)
 			--pers_prew.fill = { type = "image", filename = "assets/changePers/gg_up.png" }
 
-		local function sliderListener( event )
-			print( "Slider at " .. event.value .. "%" )
-		end
-		
-		-- Create the widget
-		local slider = widget.newSlider(
-			{
-				x = display.contentCenterX,
-				y = display.contentCenterY,
-				width = 400,
-				height = 100,
-				value = 10,  -- Start slider at 10% (optional)
-				listener = sliderListener
-			}
-		)
+		local function rotateBtnPressed( event ) 
+            if ( "ended" == event.phase ) then
+                if event.target.id == "rotateLeftBtn" then
+                    print( event.target.id )
 
+                elseif event.target.id == "rotateRight" then
+                    print( event.target.id )
+
+                end
+            end
+        end
+		
+        local rotateLeftBtn = widget.newButton(
+            {
+                id = "rotateLeftBtn",
+                x = pers_prew.x-pers_prew.width/4,
+                y = pers_prew.y+pers_prew.height/2+50,
+                width = pers_prew.width/4,
+                height = pers_prew.height/6,
+                defaultFile = "assets/errorLoad.png",
+                overFile = "assets/errorLoad.png",
+                onEvent = rotateBtnPressed
+            }
+        )
+		sceneGroup:insert(rotateLeftBtn)
+
+		local rotateRight = widget.newButton(
+            {
+                id = "rotateRight",
+                x = pers_prew.x+pers_prew.width/4,
+                y = pers_prew.y+pers_prew.height/2+50,
+                width = pers_prew.width/4,
+                height = pers_prew.height/6,
+                defaultFile = "assets/errorLoad.png",
+                overFile = "assets/errorLoad.png",
+                onEvent = rotateBtnPressed
+            }
+        )
+		sceneGroup:insert(rotateRight)
 end
 
 
