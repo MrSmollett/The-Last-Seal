@@ -17,9 +17,9 @@ function scene:create( event )
 
 	local sceneGroup = self.view
 
-    print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
+    --print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
 
-    local backgroundIMG = display.newImageRect( sceneGroup, "assets/choiceConnect/background.png", _W, _H )
+    local backgroundIMG = display.newImageRect( sceneGroup, "assets/errorLoad.png", _W, _H )
 
 
 end
@@ -36,6 +36,7 @@ function scene:show( event )
 	if ( phase == "will" ) then
 
 	elseif ( phase == "did" ) then
+        	print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
 
         local function mainMenuBtnPressed( event ) 
             if ( "ended" == event.phase ) then
@@ -56,8 +57,8 @@ function scene:show( event )
                 y = 0,
                 width = _W/5,
                 height = _H/6,
-                defaultFile = "assets/choiceConnect/lobbyBtn.png",
-                overFile = "assets/choiceConnect/lobbyBtn_pressed.png",
+                defaultFile = "assets/errorLoad.png",
+                overFile = "assets/errorLoad.png",
                 onEvent = mainMenuBtnPressed
             }
         )
@@ -69,8 +70,8 @@ function scene:show( event )
                 y = lobbyBtn.y + _H/7,
                 width = _W/5,
                 height = _H/6,
-                defaultFile = "assets/choiceConnect/randomConnectBtn.png",
-                overFile = "assets/choiceConnect/randomConnectBtn_pressed.png",
+                defaultFile = "assets/errorLoad.png",
+                overFile = "assets/errorLoad.png",
                 onEvent = mainMenuBtnPressed
             }
         )

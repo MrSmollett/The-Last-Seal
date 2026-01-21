@@ -1,7 +1,9 @@
 local composer = require( "composer" )
 local widget = require( "widget" )
 local json = require("json")
---local fairbase = require("libs.fairbase")
+local fairbase = require("libs.fairbase")
+local checkDataSc = require("scripts.checkData")
+local LFW = require("libs.libFileWork")
 
 
 
@@ -11,6 +13,8 @@ _H = display.contentHeight --Высота
 _W = display.contentWidth --Ширина
 _CX = display.contentCenterX
 _CY = display.contentCenterY
+
+userDa = LFW.Read("userData.tls")
 
 
 function scene:create( event )
@@ -42,7 +46,9 @@ function scene:show( event )
             if ( "ended" == event.phase ) then
                 if event.target.id == "playBtn" then
                     print( event.target.id )
-                    composer.gotoScene( "scenes.login" )
+
+                            composer.gotoScene( "scenes.login" )
+                    
 
                 elseif event.target.id == "optionsBtn" then
                     print( event.target.id )

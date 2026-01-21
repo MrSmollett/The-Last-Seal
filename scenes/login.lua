@@ -23,24 +23,19 @@ passwordChecks = false
 
 blur = display.newImageRect("assets/login/loadData.png", _W, _H)
     blur.x, blur.y = _CX, _CY
-blur.isVisible = false
+    blur.isVisible = false
 
 userDa = LFW.Read("userData.tls")
 
-if userDa ~= false then
-    userDa = json.decode(LFW.Read("userData.tls"))
-    checkDataSc.checkLoad(userDa.nickname, userDa.password)
-    composer.gotoScene( "scenes.changePers" )
-end
+
+
 
 
 function saveData(id, text)
     if id == "NickField" then
         nickname = text
-
     elseif id == "PasswordField" then
         password = text
-
     end
 end
 
@@ -140,9 +135,10 @@ function scene:create( event )
 
 	local sceneGroup = self.view
 
-    print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
+    --print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
 
     local backgroundIMG = display.newImageRect( sceneGroup, "assets/login/background.png", _W, _H )
+
 
 end
 
@@ -153,10 +149,27 @@ function scene:show( event )
 	local sceneGroup = self.view
         sceneGroup.x, sceneGroup.y = _CX, _CY
 	local phase = event.phase
-
+        print(event.phase)
 	if ( phase == "will" ) then
+        
+        
 		
 	elseif ( phase == "did" ) then
+
+        print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
+
+        if userDa ~= false then
+
+            composer.gotoScene( "scenes.changePers")
+
+            userDa = json.decode(LFW.Read("userData.tls"))
+            checkDataSc.checkLoad(userDa.nickname, userDa.password)
+
+            print(userDa.nickname, userDa.password)
+        end
+
+
+        
 
         NickField = nil
         PasswordField = nil
@@ -171,6 +184,7 @@ function scene:show( event )
                 native.setKeyboardFocus( nil )
             end
         end
+        	--print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
         
         -- Create text field
         NickField = native.newTextField( 0, -100, _W/3, _H/10 )
