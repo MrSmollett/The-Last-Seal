@@ -4,6 +4,7 @@ local json = require("json")
 local fairbase = require("libs.fairbase")
 local checkDataSc = require("scripts.checkData")
 local LFW = require("libs.libFileWork")
+local scripts = require("scripts.changePers")
 
 
 local scene = composer.newScene()
@@ -24,7 +25,26 @@ function scene:create( event )
 
 
 
-    local backgroundIMG = display.newImageRect( sceneGroup, "assets/login/background.png", _W, _H )
+    --local backgroundIMG = display.newImageRect( sceneGroup, "assets/login/background.png", _W, _H )
+
+		direct = {
+			left = {
+					[0] = "_down",
+					[1] = "_left",
+					[2] = "_up",
+					[3] = "_right",
+			},
+			right = {
+					[0] = "_down",
+					[3] = "_left",
+					[2] = "_up",
+					[1] = "_right",
+			}
+
+		}
+		--print(direct[1])
+
+		count = 0
 
 
 		namePers = {
@@ -38,7 +58,7 @@ function scene:create( event )
 
 		changedPersID = "gg"
 
-		local pers_prew = display.newImageRect(sceneGroup, "assets/changePers/"..namePers[changedPersID].path.."_"..direction..".png", 404*2, 404*2)
+		pers_prew = display.newImageRect(sceneGroup, "assets/changePers/"..namePers[changedPersID].path.."_"..direction..".png", 404*2, 404*2)
 			pers_prew.x, pers_prew.y = -_W/2+_W/6, 0
 
 		local options = 
@@ -53,29 +73,18 @@ function scene:create( event )
 			}
 		local pers_text = display.newText( options )
 			sceneGroup:insert(pers_text)
-			--pers_prew.fill = { type = "image", filename = "assets/changePers/gg_up.png" }
+			pers_prew.fill = { type = "image", filename = "assets/changePers/gg"..direct.left[math.abs(count)]..".png" }
 
-		local function rotateBtnPressed( event ) 
-            if ( "ended" == event.phase ) then
-                if event.target.id == "rotateLeftBtn" then
-                    print( event.target.id )
-
-                elseif event.target.id == "rotateRight" then
-                    print( event.target.id )
-
-                end
-            end
-        end
 		
         local rotateLeftBtn = widget.newButton(
             {
                 id = "rotateLeftBtn",
-                x = pers_prew.x-pers_prew.width/4,
-                y = pers_prew.y+pers_prew.height/2+50,
-                width = pers_prew.width/4,
-                height = pers_prew.height/6,
-                defaultFile = "assets/errorLoad.png",
-                overFile = "assets/errorLoad.png",
+                x = pers_prew.x-pers_prew.width/6,
+                y = pers_prew.y+pers_prew.height/2+55,
+                width = pers_prew.width/6,
+                height = pers_prew.height/8,
+                defaultFile = "assets/changePers/strLeft.png",
+                overFile = "assets/changePers/strLeft.png",
                 onEvent = rotateBtnPressed
             }
         )
@@ -84,16 +93,58 @@ function scene:create( event )
 		local rotateRight = widget.newButton(
             {
                 id = "rotateRight",
-                x = pers_prew.x+pers_prew.width/4,
-                y = pers_prew.y+pers_prew.height/2+50,
-                width = pers_prew.width/4,
-                height = pers_prew.height/6,
-                defaultFile = "assets/errorLoad.png",
-                overFile = "assets/errorLoad.png",
+                x = pers_prew.x+pers_prew.width/6,
+                y = pers_prew.y+pers_prew.height/2+55,
+                width = pers_prew.width/6,
+                height = pers_prew.height/8,
+                defaultFile = "assets/changePers/strRight.png",
+                overFile = "assets/changePers/strRight.png",
                 onEvent = rotateBtnPressed
             }
         )
 		sceneGroup:insert(rotateRight)
+
+		local logBtn = widget.newButton(
+            {
+                id = "logBtn",
+                x = _W/2-_W/6,
+                y = rotateRight.y,
+                width = 300,
+                height = 200,
+                defaultFile = "assets/changePers/loginBtn.png",
+                overFile = "assets/changePers/loginBtn_pressed.png",
+                onEvent = UIBtnPressed
+            }
+        )
+		sceneGroup:insert(logBtn)
+
+		local accBtn = widget.newButton(
+            {
+                id = "accBtn",
+                x = _W/2-_W/6,
+                y = -rotateRight.y,
+                width = 150,
+                height = 150,
+                defaultFile = "assets/changePers/account.png",
+                overFile = "assets/changePers/account_pressed.png",
+                onEvent = UIBtnPressed
+            }
+        )
+		sceneGroup:insert(accBtn)
+
+		local settingsBtn = widget.newButton(
+            {
+                id = "settingsBtn",
+                x = accBtn.x + 155,
+                y = -rotateRight.y,
+                width = 150,
+                height = 150,
+                defaultFile = "assets/changePers/settings.png",
+                overFile = "assets/changePers/settings_pressed.png",
+                onEvent = UIBtnPressed
+            }
+        )
+		sceneGroup:insert(settingsBtn)
 end
 
 
