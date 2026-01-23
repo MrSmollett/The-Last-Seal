@@ -23,6 +23,10 @@ function scene:create( event )
 	local sceneGroup = self.view
         sceneGroup.x, sceneGroup.y = _CX, _CY
 
+    print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
+
+    
+
 
 
     --local backgroundIMG = display.newImageRect( sceneGroup, "assets/login/background.png", _W, _H )
@@ -145,6 +149,19 @@ function scene:create( event )
             }
         )
 		sceneGroup:insert(settingsBtn)
+
+        eve = {
+            phase = "ended",
+            target = {
+                id = "logBtn"
+            }
+        }
+
+        function test1()
+            UIBtnPressed(eve)
+        end
+
+        timer.performWithDelay( 100, test1, 1 )
 end
 
 
@@ -159,6 +176,7 @@ function scene:show( event )
 
 		
 	elseif ( phase == "did" ) then
+        
 
 
 	end

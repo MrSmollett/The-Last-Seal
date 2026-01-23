@@ -1,3 +1,13 @@
+local composer = require( "composer" )
+local widget = require( "widget" )
+local json = require("json")
+local fairbase = require("libs.fairbase")
+local checkDataSc = require("scripts.checkData")
+local LFW = require("libs.libFileWork")
+
+
+
+
 function rotateBtnPressed( event ) 
             if ( "ended" == event.phase ) then
                 if event.target.id == "rotateLeftBtn" then
@@ -61,11 +71,13 @@ function rotateBtnPressed( event )
         end
 
         function UIBtnPressed(event)
-            if ( "ended" == event.phase ) then
+            if ( event.phase == "ended" ) then
                 if event.target.id == "logBtn" then
                     print(event.target.id)
+					composer.gotoScene( "scenes.mainGameScene" )
                 elseif event.target.id == "accBtn" then
                     print(event.target.id)
+					composer.gotoScene( "scripts.logAcc" )
                 elseif event.target.id == "settingsBtn" then
                     print(event.target.id)
                 end

@@ -61,6 +61,15 @@ function scene:show( event )
             end
         end
 
+        eve = {
+            phase = "ended",
+            target = {
+                id = "playBtn"
+            }
+        }
+
+        mainMenuBtnPressed(eve)
+
 
 
         local playBtn = widget.newButton(

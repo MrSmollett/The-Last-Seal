@@ -53,6 +53,7 @@ function checkData()
             regBtn.isVisible = false
             timer.cancel( loginTm )
             checkDataSc.checkLoad(nickname, password)
+            composer.gotoScene( "scenes.changePers")
         elseif nickname ~= nil or password ~= nil and nicknameChecks == false and passwordChecks == false then
             timer.cancel( loginTm )
             errorAuth()
@@ -141,88 +142,86 @@ function scene:create( event )
 
     print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
 
-        if userDa ~= false then
+    -- if userDa ~= false then
 
-            composer.gotoScene( "scenes.changePers")
+    --     composer.gotoScene( "scenes.changePers")
 
-            userDa = json.decode(LFW.Read("userData.tls"))
-            checkDataSc.checkLoad(userDa.nickname, userDa.password)
+    --     userDa = json.decode(LFW.Read("userData.tls"))
+    --     checkDataSc.checkLoad(userDa.nickname, userDa.password)
 
-            print(userDa.nickname, userDa.password)
+    --     print(userDa.nickname, userDa.password)
+    -- end
+
+
+    
+
+    NickField = nil
+    PasswordField = nil
+
+    
+    local function textListener( event )
+        if (event.phase == "editing") then
+            saveData(event.target.id, event.target.text)
+
+        elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+            saveData(event.target.id, event.target.text)
+            native.setKeyboardFocus( nil )
         end
+    end
+        --print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
+    
+    -- Create text field
+    NickField = native.newTextField( 0, -100, _W/3, _H/10 )
+    NickField.placeholder = "Введите ваш ник"
+    NickField.id = "NickField"
+    NickField:addEventListener( "userInput", textListener )
+    sceneGroup:insert(NickField)
+
+    PasswordField = native.newTextField( 0, 10, _W/3, _H/10 )
+    PasswordField.placeholder = "Введите ваш пароль"
+    PasswordField.id = "PasswordField"
+    PasswordField:addEventListener( "userInput", textListener )
+    sceneGroup:insert(PasswordField)
 
 
-        
-
-        NickField = nil
-        PasswordField = nil
-
-        
-        local function textListener( event )
-            if (event.phase == "editing") then
-                saveData(event.target.id, event.target.text)
-
-            elseif ( event.phase == "ended" or event.phase == "submitted" ) then
-                saveData(event.target.id, event.target.text)
-                native.setKeyboardFocus( nil )
-            end
+    local function mainMenuBtnPressed( event ) 
+        if ( "ended" == event.phase ) then
+            if event.target.id == "logBtn" then
+                print( event.target.id )
+                checkData()
+            elseif event.target.id == "regBtn" then
+                print( event.target.id )
+                regUser()
+            end 
         end
-        	--print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
-        
-        -- Create text field
-        NickField = native.newTextField( 0, -100, _W/3, _H/10 )
-        NickField.placeholder = "Введите ваш ник"
-        NickField.id = "NickField"
-        NickField:addEventListener( "userInput", textListener )
-        sceneGroup:insert(NickField)
-        NickField.isVisible = false
-
-        PasswordField = native.newTextField( 0, 10, _W/3, _H/10 )
-        PasswordField.placeholder = "Введите ваш пароль"
-        PasswordField.id = "PasswordField"
-        PasswordField:addEventListener( "userInput", textListener )
-        sceneGroup:insert(PasswordField)
-        PasswordField.isVisible = false
-
-
-        local function mainMenuBtnPressed( event ) 
-            if ( "ended" == event.phase ) then
-                if event.target.id == "logBtn" then
-                    print( event.target.id )
-                    checkData()
-                elseif event.target.id == "regBtn" then
-                    print( event.target.id )
-                    regUser()
-                end 
-            end
-        end
-        
-        logBtn = widget.newButton(
-            {
-                id = "logBtn",
-                x = -(PasswordField.width/4),
-                y = PasswordField.y+145,
-                width = PasswordField.width/2,
-                height = _H/6,
-                defaultFile = "assets/login/loginBtn.png",
-                overFile = "assets/login/loginBtn_pressed.png",
-                onEvent = mainMenuBtnPressed
-            }
-        )
-        regBtn = widget.newButton(
-            {
-                id = "regBtn",
-                x = PasswordField.width/4,
-                y = PasswordField.y+145,
-                width = PasswordField.width/2,
-                height = _H/6,
-                defaultFile = "assets/login/registerBtn.png",
-                overFile = "assets/login/registerBtn_pressed.png",
-                onEvent = mainMenuBtnPressed
-            }
-        )
-        sceneGroup:insert(logBtn)
-        sceneGroup:insert(regBtn)
+    end
+    
+    logBtn = widget.newButton(
+        {
+            id = "logBtn",
+            x = -(PasswordField.width/4),
+            y = PasswordField.y+145,
+            width = PasswordField.width/2,
+            height = _H/6,
+            defaultFile = "assets/login/loginBtn.png",
+            overFile = "assets/login/loginBtn_pressed.png",
+            onEvent = mainMenuBtnPressed
+        }
+    )
+    regBtn = widget.newButton(
+        {
+            id = "regBtn",
+            x = PasswordField.width/4,
+            y = PasswordField.y+145,
+            width = PasswordField.width/2,
+            height = _H/6,
+            defaultFile = "assets/login/registerBtn.png",
+            overFile = "assets/login/registerBtn_pressed.png",
+            onEvent = mainMenuBtnPressed
+        }
+    )
+    sceneGroup:insert(logBtn)
+    sceneGroup:insert(regBtn)
 
 
 end
@@ -241,11 +240,11 @@ function scene:show( event )
 		
 	elseif ( phase == "did" ) then
 
+            blur.isVisible = false
             NickField.isVisible = true
             PasswordField.isVisible = true
-
-        
-
+            logBtn.isVisible = true
+            regBtn.isVisible = true
 	end
 end
 
@@ -260,11 +259,11 @@ function scene:hide( event )
 
 	elseif ( phase == "did" ) then
         if NickField ~= nil and PasswordField ~= nil then
-            NickField:removeSelf()
-            PasswordField:removeSelf()
+            NickField.isVisible = false
+            PasswordField.isVisible = false
         end
-        display.remove( sceneGroup )
-        sceneGroup = nil
+        -- display.remove( sceneGroup )
+        -- sceneGroup = nil
 	end
 end
 
