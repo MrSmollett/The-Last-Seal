@@ -5,7 +5,15 @@ local fairbase = require("libs.fairbase")
 local checkDataSc = require("scripts.checkData")
 local LFW = require("libs.libFileWork")
 
-url = "https://thelastseal-1488-default-rtdb.firebaseio.com/"
+serverName = composer.getVariable( "serverName" )
+
+urlList = {
+    [0] = "https://thelastseal-1488-default-rtdb.firebaseio.com/",
+    [1] = "https://thelastseal-altserver1-default-rtdb.europe-west1.firebasedatabase.app/"
+}
+
+url = urlList[serverName]
+
 
 
 
@@ -53,6 +61,7 @@ function checkData()
             regBtn.isVisible = false
             timer.cancel( loginTm )
             checkDataSc.checkLoad(nickname, password)
+            composer.gotoScene( "scenes.changePers")
         elseif nickname ~= nil or password ~= nil and nicknameChecks == false and passwordChecks == false then
             timer.cancel( loginTm )
             errorAuth()
@@ -74,14 +83,14 @@ function checkData()
         if nickname == NC then
             nicknameChecks = true
         else
-            print(nicknameChecks, nickname, NC)
+            --print(nicknameChecks, nickname, NC)
         end
     end
     function passwordCheck(PC)
         if password == PC then
             passwordChecks = true
         else
-            print(passwordChecks, password, PC)
+            --print(passwordChecks, password, PC)
         end
     end
 
@@ -91,8 +100,8 @@ function checkData()
 
 
     else
-        fairbase.getData(url.."usersDate/"..nickname.."/nickname/value/", function(dat) nicknameCheck(string.gsub(dat, '[\\"]', "" )) end)
-        fairbase.getData(url.."usersDate/"..nickname.."/password/value/", function(dat) passwordCheck(string.gsub(dat, '[\\"]', "" )) end)
+        fairbase.getData(url.."usersDate/"..nickname.."/nickname/value/", function(dat) nicknameCheck(dat) end)
+        fairbase.getData(url.."usersDate/"..nickname.."/password/value/", function(dat) passwordCheck(dat) end)
         blur.isVisible = true
 
         logBtn.isVisible = false
@@ -107,6 +116,9 @@ function regUser()
     if nickname == nil or password == nil then
         print("Проверьте заполненность полей!")
         native.showAlert( "Регистрация", "Проверьте заполненность полей!", { "OK" } )
+    elseif #nickname > 15 then
+        print("Ник должен быть меньше 15 символов!")
+        native.showAlert( "Регистрация", "Ник должен быть меньше 15 символов!", { "OK" } )
     else
         fairbase.updateData(url.."usersDate/"..nickname.."/nickname/", nickname)
         fairbase.updateData(url.."usersDate/"..nickname.."/password/", password)
@@ -148,7 +160,7 @@ function scene:create( event )
             userDa = json.decode(LFW.Read("userData.tls"))
             checkDataSc.checkLoad(userDa.nickname, userDa.password)
 
-            print(userDa.nickname, userDa.password)
+            --print(userDa.nickname, userDa.password)
         end
 
 
@@ -164,7 +176,7 @@ function scene:create( event )
 
             elseif ( event.phase == "ended" or event.phase == "submitted" ) then
                 saveData(event.target.id, event.target.text)
-                native.setKeyboardFocus( nil )
+                --native.setKeyboardFocus( nil )
             end
         end
         	--print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
@@ -234,7 +246,7 @@ function scene:show( event )
 	local sceneGroup = self.view
         sceneGroup.x, sceneGroup.y = _CX, _CY
 	local phase = event.phase
-        print(event.phase)
+        --print(event.phase)
 	if ( phase == "will" ) then
         
         

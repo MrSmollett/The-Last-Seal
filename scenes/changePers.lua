@@ -161,7 +161,7 @@ function scene:create( event )
             UIBtnPressed(eve)
         end
 
-        timer.performWithDelay( 100, test1, 1 )
+        --timer.performWithDelay( 100, test1, 1 )
 end
 
 

@@ -27,8 +27,9 @@ M = {}
         print("[DEBUG] ------ ".."Hero")
 
         hero = display.newImageRect( cameraGroup, "assets/game/character/hero/gg_down.png", 600, 600 )
-        
     end
+        
+    M.loadMove = function()
 
         local speed = 10
         local keys = {}
@@ -87,5 +88,6 @@ M = {}
         -- Подключаем обработчики
         Runtime:addEventListener("key", onKeyEvent)
         Runtime:addEventListener("enterFrame", onEnterFrame)
+    end
 
 return M

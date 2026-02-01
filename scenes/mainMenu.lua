@@ -27,6 +27,12 @@ function scene:create( event )
     local appName = display.newImageRect( sceneGroup, "assets/mainMenu/appName.png", _W/3, _H/6 )
         appName.x, appName.y = 0, -_H/5
 
+        if userDa ~= nil and userDa.server ~= nil then
+                composer.setVariable( "serverName", userDa.server )
+        else
+            composer.setVariable( "serverName", 1 )
+        end
+
 end
 
 
@@ -46,12 +52,11 @@ function scene:show( event )
             if ( "ended" == event.phase ) then
                 if event.target.id == "playBtn" then
                     print( event.target.id )
-
-                            composer.gotoScene( "scenes.login" )
+                    composer.gotoScene( "scenes.login" )
                     
-
                 elseif event.target.id == "optionsBtn" then
                     print( event.target.id )
+                    composer.gotoScene( "scenes.options" )
 
                 elseif event.target.id == "quitBtn" then
                     print( event.target.id )
@@ -68,7 +73,7 @@ function scene:show( event )
             }
         }
 
-        mainMenuBtnPressed(eve)
+        --mainMenuBtnPressed(eve)
 
 
 

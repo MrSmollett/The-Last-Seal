@@ -8,8 +8,17 @@ function networkListener(event)
         if event.isError then
             print("Ошибка:", event.response)
         else
-            print("Успешно:", event.response)
-        end
+            --print("Успешно:", event.response)
+            if event.response then
+            local responseData = json.decode(event.response)
+                --if responseData and responseData.value then
+                    -- Полностью заменяем локальную таблицу на серверную (защита от конфликтов)
+                    --nicknamesTable = responseData.value
+                    --print("[DEBUG] ------ DataGET:" .. responseData)
+                    --printNickList(responseData.value)
+                --end
+            end
+            end
     end
 
 
@@ -46,19 +55,25 @@ M.deleteKey = function( url )
 
 end
 
-M.getData = function(url, FirebaseGet)
-    local dataGet = nil
-
+M.getData = function(url, FirebaseGet, Name)
+--local dataGEt = nil
     local networkGetListener = function(event)
+        
         if event.phase == "ended" then
+            
             if event.isError then
                 print("Ошибка загрузки:", event.response)
             else
-                dataGet = json.encode(event.response)
-                if dataGet then
-                    FirebaseGet(dataGet)
+                --print(event.isError)
+                local dataGEt = json.decode(event.response)
+                --print(dataGEt)
+                if dataGEt then
+                --print(responseData.value)
+                    FirebaseGet(dataGEt, Name)
+                    
                 else
-                    print("Данные не найдены или ответ пуст")
+                    --print(dataGEt)
+                    FirebaseGet(dataGEt)
                 end
             end
         end
