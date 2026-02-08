@@ -4,6 +4,7 @@ local json = require("json")
 local fairbase = require("libs.fairbase")
 local checkDataSc = require("scripts.checkData")
 local LFW = require("libs.libFileWork")
+--local LFW = require("libs.tools")
 local scripts = require("scripts.mainGameScene")
 
 
@@ -46,6 +47,11 @@ function scene:create( event )
         --fairbase.updateData(url.."usersList/", userDa.nickname)
 
         checkDataSc.checkOnline(userDa.nickname)
+
+
+        
+
+        tmOnList = timer.performWithDelay( 1000, function() checkDataSc.updateDataList() end, 0 )
 
     cameraGroup = display.newGroup()
         self.view:insert(cameraGroup)

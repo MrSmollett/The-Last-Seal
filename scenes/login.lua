@@ -53,8 +53,6 @@ function checkData()
     local count = 1
 
     local function loginTmL(event)
-        --print( nicknameChecks, passwordChecks )
-        --print( password, nickname )
         if nicknameChecks == true and passwordChecks == true then
             blur.isVisible = false
             logBtn.isVisible = false
@@ -82,15 +80,11 @@ function checkData()
     function nicknameCheck(NC)
         if nickname == NC then
             nicknameChecks = true
-        else
-            --print(nicknameChecks, nickname, NC)
         end
     end
     function passwordCheck(PC)
         if password == PC then
             passwordChecks = true
-        else
-            --print(passwordChecks, password, PC)
         end
     end
 
@@ -147,8 +141,6 @@ function scene:create( event )
 
 	local sceneGroup = self.view
 
-    --print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
-
     local backgroundIMG = display.newImageRect( sceneGroup, "assets/login/background.png", _W, _H )
 
     print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
@@ -159,8 +151,6 @@ function scene:create( event )
 
             userDa = json.decode(LFW.Read("userData.tls"))
             checkDataSc.checkLoad(userDa.nickname, userDa.password)
-
-            --print(userDa.nickname, userDa.password)
         end
 
 
@@ -176,12 +166,10 @@ function scene:create( event )
 
             elseif ( event.phase == "ended" or event.phase == "submitted" ) then
                 saveData(event.target.id, event.target.text)
-                --native.setKeyboardFocus( nil )
+
             end
         end
-        	--print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
-        
-        -- Create text field
+
         NickField = native.newTextField( 0, -100, _W/3, _H/10 )
         NickField.placeholder = "Введите ваш ник"
         NickField.id = "NickField"
@@ -249,14 +237,9 @@ function scene:show( event )
         --print(event.phase)
 	if ( phase == "will" ) then
         
-        
-		
 	elseif ( phase == "did" ) then
-
             NickField.isVisible = true
             PasswordField.isVisible = true
-
-        
 
 	end
 end

@@ -9,8 +9,8 @@ local LFW = require("libs.libFileWork")
 
 local scene = composer.newScene()
 
-_H = display.contentHeight --Высота
-_W = display.contentWidth --Ширина
+_H = display.contentHeight      --Высота
+_W = display.contentWidth       --Ширина
 _CX = display.contentCenterX
 _CY = display.contentCenterY
 
@@ -23,16 +23,15 @@ function scene:create( event )
 
     print( "Текущая сцена: ".. composer.getSceneName( "current" ) )
 
-    local backgroundIMG = display.newImageRect( sceneGroup, "assets/mainMenu/background.png", _W, _H )
-    local appName = display.newImageRect( sceneGroup, "assets/mainMenu/appName.png", _W/3, _H/6 )
-        appName.x, appName.y = 0, -_H/5
+    local backgroundIMG = display.newImageRect( sceneGroup, "assets/mainMenu/background.png", _W, _H )      --создание фона
+    local appName = display.newImageRect( sceneGroup, "assets/mainMenu/appName.png", _W/3, _H/6 )       --создание названия игры
+        appName.x, appName.y = 0, -_H/5     --задание позиции названия
 
-        if userDa ~= nil and userDa.server ~= nil then
-                composer.setVariable( "serverName", userDa.server )
+        if userDa ~= nil and userDa.server ~= nil then      --установка значения для переменной сервера
+            composer.setVariable( "serverName", userDa.server )
         else
             composer.setVariable( "serverName", 1 )
         end
-
 end
 
 
@@ -52,29 +51,19 @@ function scene:show( event )
             if ( "ended" == event.phase ) then
                 if event.target.id == "playBtn" then
                     print( event.target.id )
-                    composer.gotoScene( "scenes.login" )
+                    composer.gotoScene( "scenes.login" ) --переход к сцене входа
                     
                 elseif event.target.id == "optionsBtn" then
                     print( event.target.id )
-                    composer.gotoScene( "scenes.options" )
+                    composer.gotoScene( "scenes.options" ) --переход к настройкм
 
                 elseif event.target.id == "quitBtn" then
                     print( event.target.id )
-                    native.requestExit()
+                    native.requestExit() --выход из игры
 
                 end
             end
         end
-
-        eve = {
-            phase = "ended",
-            target = {
-                id = "playBtn"
-            }
-        }
-
-        --mainMenuBtnPressed(eve)
-
 
 
         local playBtn = widget.newButton(
@@ -89,7 +78,7 @@ function scene:show( event )
                 alpha = 0.5,
                 onEvent = mainMenuBtnPressed
             }
-        )
+        ) --создание кнопки входа
 
         local optionsBtn = widget.newButton(
             {
@@ -102,7 +91,7 @@ function scene:show( event )
                 overFile = "assets/mainMenu/optionsBtn_pressed.png",
                 onEvent = mainMenuBtnPressed
             }
-        )
+        ) --создание кнопки опций
 
         local quitBtn = widget.newButton(
             {
@@ -115,7 +104,7 @@ function scene:show( event )
                 overFile = "assets/mainMenu/quitBtn_pressed.png",
                 onEvent = mainMenuBtnPressed
             }
-        )
+        ) -- создание кнопки выхода
 
 
         sceneGroup:insert(playBtn)

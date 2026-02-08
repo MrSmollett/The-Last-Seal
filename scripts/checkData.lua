@@ -15,6 +15,9 @@ url = urlList[serverName]
 
 logDat = {}
 
+nicknamesTable = {}
+nicknamesTableNew = {}
+
 M = {}
 
 M.checkLoad = function(nickname, password)
@@ -48,7 +51,7 @@ end
 M.checkOnline = function(nickname)
 
         -- Глобальная таблица для хранения ников (кэш клиента)
-        local nicknamesTable = {}
+        
 
         function niceLoadList()
             -- Флаг: идёт ли сейчас синхронизация с сервером
@@ -159,6 +162,34 @@ M.checkOnline = function(nickname)
         
         
     end
+
+M.updateDataList = function()
+    function TEST(url)
+        network.request(url .. ".json", "GET", function(event)
+            if not event.isError then
+                local data = json.decode(event.response)
+                if data and data.value then
+                    nicknamesTableNew = data.value
+                    --print("Список игроков загружен. Игроков: " .. #nicknamesTableNew)
+                end
+            else
+                
+            end
+        end)
+    end
+    TEST(url.."usersList")
+
+    for i = 0, #nicknamesTableNew, 1 do
+        if nicknamesTableNew[i] == nicknamesTable[i] then
+            
+        else
+            --print(nicknamesTableNew[i])
+            nicknamesTable = nicknamesTableNew
+            updatePlayers(nicknamesTableNew[i], nicknamesTable)
+        end
+    end
+    
+end
 
 
 return M

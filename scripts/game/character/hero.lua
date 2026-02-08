@@ -71,6 +71,12 @@ M = {}
             local dx, dy = 0, 0
             local moveCount = 0
 
+            if keys.leftShift then
+                speed = 15
+            else
+                speed = 10
+            end
+
             if keys.w then dy = dy - speed; moveCount = moveCount + 1 end
             if keys.s then dy = dy + speed; moveCount = moveCount + 1 end
             if keys.a then dx = dx - speed; moveCount = moveCount + 1 end

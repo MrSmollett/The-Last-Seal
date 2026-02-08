@@ -55,6 +55,16 @@ function printNickList(nickList)
     netWorkTimer = timer.performWithDelay( 500, netWorkTimerListener, 0)
 end
 
+function updatePlayers(upDPlayers, tablePl)
+    nicknameList = tablePl
+        players[upDPlayers] = display.newImageRect( cameraGroup, "assets/game/character/hero/gg_down.png", 600, 600 )
+            players[upDPlayers].id = upDPlayers
+        players[upDPlayers].text = display.newText(upDPlayers, players[upDPlayers].x, players[upDPlayers].y - players[upDPlayers].height/2-100, native.systemFont, 72)
+            cameraGroup:insert(players[upDPlayers].text)
+            
+        print(players[upDPlayers].id)
+end
+
 function setPos(pos, NAMEX)
     transition.to(players[NAMEX].text, {
         x = tonumber(pos),
